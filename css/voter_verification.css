@@ -1,0 +1,25 @@
+nav{
+    height:10vh;
+    background-color: #092635;
+    padding:15px;
+    /* position:fixed; */
+    width:100vw;
+    top:0;
+}.container-body{
+    height:calc(100vh - 10vh);
+    display:grid;
+    justify-content:center;
+    align-items:center;
+
+}.container-body .center-container{
+    border:2px solid #092635;
+    padding:10px;
+    width:50vw;
+    text-align:center;
+}hr{
+    border:2px solid #092635; 
+}.center-container .body-text{
+    word-wrap:keep-all;
+}h2{
+    color:#9EC8B9;
+}

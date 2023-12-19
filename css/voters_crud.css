@@ -1,0 +1,23 @@
+.nav-body{
+    padding:5px;
+    display:flex;
+    justify-content:space-between;
+}.nav-body h3 {
+  margin: 5px 60px 5px 5px;
+
+}td img {
+  width:50px;
+  height:50px;
+  border-radius:360px;
+}
+td{
+  text-align:left;
+}.left-group{
+  display:flex;
+}.left-group button{
+  margin:5px;
+}.form-search-control{
+  width:50%;
+  display:flex;
+  align-items:center;
+}
