@@ -1,3 +1,8 @@
+<?php 
+    if(!isset($_SESSION['user_type']) || $_SESSION['user_type']!="Admin"){
+      header("location: ../index.php");
+    }
+?>
 <link rel="stylesheet" href="../css/voters_crud.css">
 <div class="nav-body">
 <div class="left-group">
@@ -18,9 +23,9 @@
     <tr>
       <th scope="col">#</th>
       <th scope="col">Picture Profile</th>
+      <th scope="col">User ID</th>
       <th scope="col">First name</th>
       <th scope="col">Last name</th>
-      <th scope="col">User ID</th>
       <th scope="col">Precinct #</th>
       <th scope="col">Options</th>
     </tr>
@@ -35,9 +40,9 @@
       <tr>
       <th scope="row"><?php echo $rows['id']; ?></th>
       <td><img src="<?php echo "../profile/".$rows['Profile_pic']; ?>" alt=""></td>
+      <td><b><?php echo $rows['UserID']; ?></b></td>
       <td><?php echo $rows['Firstname']; ?></td>
       <td><?php echo $rows['Lastname']; ?></td>
-      <td><?php echo $rows['UserID']; ?></td>
       <td><?php echo $rows['Precinct']; ?></td>
       <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal-<?php echo $rows['id'];?>">Edit</button>
       <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#DeleteModal-<?php echo $rows['id'];?>">Delete</button></td>

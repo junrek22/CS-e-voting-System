@@ -1,3 +1,8 @@
+<?php 
+if(!isset($_SESSION['user_type']) || $_SESSION['user_type']!="Admin"){
+  header("location: ../index.php");
+}
+?>
 <style>
     .nav-body{
         padding:10px 10px 10px 20px;

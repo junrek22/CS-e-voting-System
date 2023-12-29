@@ -1,5 +1,8 @@
 <?php include "../css/bootstrap.php";
-session_start();?>
+session_start();
+if(!isset($_SESSION['user_type']) && $_SESSION['user_type']!="Admin"){
+    header("location: ../index.php");
+}?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,10 +41,10 @@ session_start();?>
     <div class="bodypage">
        <?php include "../includes/position_crud.php";?>
     </div>
-    <?php
+   <?php
 if(isset($_SESSION['function'])){
     echo $_SESSION['function'];
     unset($_SESSION['function']);
-}?>
+}?> 
 </body>
 </html>

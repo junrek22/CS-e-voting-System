@@ -1,7 +1,11 @@
 <?php 
-    include "db.php";
+include "db.php";
+if(!isset($_SESSION['user_type']) || $_SESSION['user_type']!="Admin"){
+  header("location: ../index.php");
+}else{
     $queryDisplay = $conn->prepare("SELECT * FROM voters WHERE Status = 'Pending' ORDER BY id DESC");
     $queryDisplay->execute();
+}
 ?>
     <?php foreach($queryDisplay as $query): ?>
     <tr id="table-row-<?php echo $query['id'];?>">

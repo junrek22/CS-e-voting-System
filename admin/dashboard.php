@@ -1,5 +1,12 @@
 <?php include "../css/bootstrap.php";
-session_start();?>
+session_start();
+if(!isset($_SESSION['user_type']) && $_SESSION['user_type']!="Admin"){
+    header("location: ../index.php");
+}else{
+    $admin_user_type = $_SESSION['user_type'];
+    $admin_username = $_SESSION['username'];
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +16,12 @@ session_start();?>
     <style>
 </style>
 </head>
+<style>
+        .bodypage{
+            background-color: #F0ECE5;
+        }
+    </style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <link rel="stylesheet" href="../css/default-style.css">
 <body>
     <nav>
@@ -37,7 +50,13 @@ session_start();?>
         </ul>
     </div>
     <div class="bodypage">
-
+        <?php include "../includes/dashboard_body.php";?>
     </div>
+  
+   <?php
+if(isset($_SESSION['function'])){
+    echo $_SESSION['function'];
+    unset($_SESSION['function']);
+}?>
 </body>
 </html>

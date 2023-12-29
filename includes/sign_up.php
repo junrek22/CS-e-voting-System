@@ -1,6 +1,6 @@
 <?php 
-session_start();
 include "db.php";
+session_start();
 if(isset($_POST['submit_register'])){
     $firstname = $_POST['firstname'];
     $lastname = $_POST['lastname'];
@@ -21,7 +21,7 @@ if(isset($_POST['submit_register'])){
         $realPassword = password_hash($password, PASSWORD_DEFAULT);
         if(in_array($profile_type, $allowedType)){
             $profile_name = (!empty(($_FILES['profile']['name']))) ? "profile-voter-".$userID.".".$profile_type : $profile_pic_name;
-            $queryVoters = $conn->prepare("INSERT INTO voters (UserID, Precinct, Firstname, Lastname, Profile_pic, Status, acc_stat) VALUES ('$userID', '$randomPrecinct', '$firstname', '$lastname', '$profile_name', 'Pending', 'New')");
+            $queryVoters = $conn->prepare("INSERT INTO voters (UserID, Precinct, Firstname, Lastname, Profile_pic, Status, acc_stat, vote_stat) VALUES ('$userID', '$randomPrecinct', '$firstname', '$lastname', '$profile_name', 'Pending', 'Old','NOTVOTED')");
             $queryVoters->execute();
             $queryLogin = $conn->prepare("INSERT INTO login (Username, Password, User_Type) VALUES ('$userID','$realPassword', 'Voters')");
             $queryLogin->execute();
@@ -44,6 +44,7 @@ if(isset($_POST['submit_register'])){
         Don't forget your Username or User ID, Please write it on your note in case
         </div>";
         $_SESSION['verif-header'] = "VERIFY YOUR ACCOUNT";
+        $_SESSION['user_type'] = "Voters";
         header("location: ../voter_verification.php");
     }else{
         $_SESSION['message-error'] = "<div class='alert alert-danger' role='alert'>
@@ -51,5 +52,7 @@ if(isset($_POST['submit_register'])){
       </div>";
         header("location: ../index.php");
     }
+}else{
+    header("location: ../index.php");
 }
 ?>

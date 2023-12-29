@@ -1,5 +1,8 @@
 <?php include "../css/bootstrap.php";
 session_start();
+if(!isset($_SESSION['user_type']) && $_SESSION['user_type']!="Admin"){
+    header("location: ../index.php");
+};
 ?>
 <!DOCTYPE html>
 <html lang="en">

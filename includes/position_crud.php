@@ -1,3 +1,8 @@
+<?php 
+if(!isset($_SESSION['user_type']) || $_SESSION['user_type']!="Admin"){
+  header("location: ../index.php");
+}
+?>
 <link rel="stylesheet" href="../css/position_crud.css">
 <div class="nav-body">
 <div class="left-group">

@@ -24,9 +24,5 @@ $(document).ready(function(){
     }else{
       $(".seeMoreBox").css("word-break", "keep-all");
     }
-
-
-
-    
 });
 </script>

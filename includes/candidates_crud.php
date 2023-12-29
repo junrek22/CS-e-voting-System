@@ -1,3 +1,8 @@
+<?php 
+if(!isset($_SESSION['user_type']) || $_SESSION['user_type']!="Admin"){
+  header("location: ../index.php");
+}
+?>
 <link rel="stylesheet" href="../css/position_crud.css">
 <div class="nav-body">
 <div class="left-group">
@@ -13,11 +18,12 @@
 </div>
 <h3>List of Candidates</h3>
 </div>
-<table class="table table-striped">
+<table id="myTable" class="table table-striped">
 <thead class="table-dark">
     <tr>
       <th scope="col">#</th>
       <th scope="col">Profile Picture</th>
+      <th scope="col">Candidate ID</th>
       <th scope="col">Nickname</th>
       <th scope="col">Firstname</th>
       <th scope="col">Lastname</th>
@@ -36,6 +42,7 @@
         <tr>
         <th scope="row"><?php echo $rows['id']; ?></th>
         <td><img src="<?php echo "../profile/".$rows['profile_pic']; ?>" alt=""></td>
+        <th><?php echo $rows['candidate_id']; ?></th>
         <th><?php echo $rows['candidate_nickname']; ?></th>
         <td><?php echo $rows['candidate_first_name']; ?></td>
         <td><?php echo $rows['candidate_last_name']; ?></td>
@@ -84,7 +91,8 @@
                   <input type="text" name="cand_Edit_nickname" class="form-control" id="FormPosition" value="<?php echo $rows['candidate_nickname']; ?>" required>
                 </div>
                 <div class="mb-3">
-                <select name="cand_Edit_position" class="form-select form-select-lg mb-3" aria-label="Large select example">
+                <label for="FormCandPosition" class="form-label">Position</label>
+                <select name="cand_Edit_position" class="form-select" aria-label="Default select example" id="FormCandPosition">
                     <?php 
                     $queryPosition = $conn->prepare("SELECT position_name FROM positions");
                     $queryPosition->execute();
@@ -180,7 +188,7 @@
             </div>
             <div class="mb-3">
                 <label for="FormCandPosition" class="form-label">Position</label>
-                <select name="cand_position" class="form-select form-select-lg mb-3" id="FormCandPosition" aria-label="Large select example" required>
+                <select name="cand_position" class="form-select" id="FormCandPosition" aria-label="Default select example" required>
                     <option value="invalid" selected>Select Position</option>
                     <?php
                       $queryPositioncreate = $conn->prepare("SELECT position_name FROM positions");

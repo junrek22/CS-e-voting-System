@@ -1,0 +1,86 @@
+*{
+    padding:0;
+    margin:0;
+    }.voter-center h3{
+        text-align:center;
+        margin:30px;
+    }
+    nav {
+        background-color: #092635;
+        height: 10vh;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-left: 15px;
+        position:fixed;
+        width:100vw;
+        top:0;
+
+    }h2, #profile-drop{
+        color:#9EC8B9;
+    }.dropdown img{
+        width:30px;
+        height:30px;
+        border-radius:360px;
+        margin-right:5px;
+    }.profile-button{
+        margin-right:20px;
+    }
+    .dropdown-toggle::after {
+    display:none;
+    }i{
+        margin-right:10px;
+    }.dropdown-item{
+        color:#092635
+    }.voter-container{
+        margin-top:10vh;
+        /* border:1px solid black; */
+        display:flex;
+        justify-content:center;
+    }.voter-form .submit{
+        /* border:1px solid black; */
+        width:100%;
+        margin-bottom:20px;
+    }.position-card h3{
+        text-align:center;
+        margin:20px;
+    }.position-card{
+        /* border:1px solid #092635; */
+        border:2px solid #092635;
+        width:40vw;
+        border-radius:5px;
+        margin:10px;
+        margin:20px 0px 20px 0px;
+    }.button-and-profile{
+        display:flex;
+        align-items:center;
+        justify-content:space-around;
+        /* border:1px solid black; */
+        flex:1;
+    }.button-and-profile img{
+        width:70px;
+        height:70px;
+        border-radius:360px;
+    }.voter-card{
+        display:flex;
+        border:2px solid #9EC8B9;
+        border-radius:10px;
+        margin:10px;
+        column-gap:20px;
+        cursor: pointer;
+    }.voter-card:hover{
+        box-shadow: #9EC8B9 0px 5px 15px;
+    }.name-position{
+        border-left:1px solid #9EC8B9;
+        flex:2;
+        word-break:keep-all;
+        padding:10px 15px 10px 15px;
+    }.platform{
+        width:100%;
+        margin-top:10px;
+    }.name-position h4{
+        margin:10px;
+    }hr{
+        margin:0;
+        border:1px solid black;
+    }
