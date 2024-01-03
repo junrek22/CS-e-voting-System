@@ -33,7 +33,7 @@ if(isset($_POST['submit_change_admin']) && $_SESSION['user_type']=="Admin"){
     }
 }
 
-if(isset($_POST['submit_change_banner']) && $_SESSION['user_type']=="Admin"){
+else if(isset($_POST['submit_change_banner']) && $_SESSION['user_type']=="Admin"){
     $confPassword = $_POST['passwordConfirm'];
     $userAdmin = $_SESSION['user_type'];
     $queryPull = $conn->prepare("SELECT Password FROM login WHERE User_Type = '$userAdmin'");

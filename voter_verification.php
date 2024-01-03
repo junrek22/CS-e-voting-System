@@ -1,6 +1,6 @@
 <?php include "css/bootstrap.php"; 
 session_start();
-if(!isset($_SESSION['user_type']) || $_SESSION['user_type']!="Voters"){
+if(!isset($_SESSION['stats']) || $_SESSION['stats'] != "Pending"){
     header("location: index.php");
 }
 ?>

@@ -5,19 +5,25 @@ if(!isset($_SESSION['user_type']) || $_SESSION['user_type']!="Admin"){
 ?>
 <link rel="stylesheet" href="../css/position_crud.css">
 <div class="nav-body">
-<div class="left-group">
-  <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#NewModal">
-    New
-  </button>
-  <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#NewModal">
-    Delete all records
-  </button>
+  <div class="left-group">
+    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#NewModal">
+      New
+    </button>
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteRecords">
+      Delete all records
+    </button>
+  </div>
+  <div class="form-search-control">
+      <input type="text" name="search" class="form-control" id="seachControl" placeholder="Search Something" required>
+  </div>
+  <h3>List of Candidates</h3>
 </div>
-<div class="form-search-control">
-    <input type="text" name="search" class="form-control" id="seachControl" placeholder="Search Something" required>
-</div>
-<h3>List of Candidates</h3>
-</div>
+<?php 
+include "db.php";
+$queryrow = $conn->prepare("SELECT Position FROM candidate");
+$queryrow->execute();
+?>
+
 <table id="myTable" class="table table-striped">
 <thead class="table-dark">
     <tr>
@@ -31,6 +37,7 @@ if(!isset($_SESSION['user_type']) || $_SESSION['user_type']!="Admin"){
       <th id="option" scope="col" >Options</th>
     </tr>
   </thead>
+  <?php if($queryrow->rowCount() > 0):?>
   <tbody id="records">
     <?php 
       include "../includes/db.php";
@@ -142,13 +149,14 @@ if(!isset($_SESSION['user_type']) || $_SESSION['user_type']!="Admin"){
             <div class="modal-body">
               <form action="../includes/create_candidates.php" method="post">
                   <div class="mb-3">
-                    are you sure you wanna delete the Candidate
+                    <p>are you sure you wanna delete the Candidate</p>
                     <p><b><?php echo ' "'.$rows['candidate_first_name']." ".$rows['candidate_last_name'].'"?';?></b></p>
                   </div>
-                  <div id="passwordHelpBlock" class="form-text">
-                    To proceed to delete this row, enter the admin password.
-                  </div>
-                  <input type="password" class="form-control" name="passwordConfirm" aria-describedby="passwordHelpBlock" placeholder="Password" required>
+                  <label for="PasstoConfirm" class="form-label">Password</label>
+                  <input type="password" class="form-control" name="passwordConfirm" aria-describedby="passwordHelpBlock" required>
+                    <div id="passwordHelpBlock" class="form-text">
+                      To proceed to delete this row, Enter the admin password.
+                    </div>
                   <input type="hidden" name="CandidateID" class="form-control" value="<?php echo $rows['id']; ?>">
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -161,8 +169,50 @@ if(!isset($_SESSION['user_type']) || $_SESSION['user_type']!="Admin"){
       </div>
       <?php endforeach; ?>
   </tbody>
+  <?php endif; ?>
 </table>
 
+<?php if($queryrow->rowCount() <= 0):?>
+  <div id="chart-blank">
+      <h3>NO CANDIDATES RECORD</h3>
+  </div>
+  <style>
+    #chart-blank{
+      height:calc(80vh - 10vh);
+      display:grid;
+      place-items:center;
+    }#chart-blank h3{
+      color:#B6C4B6;
+    }
+  </style>
+<?php endif; ?>
+<div class="modal fade" id="deleteRecords" tabindex="-1" aria-labelledby="deleterecordslabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="deleterecordslabel">Delete all records</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action="../includes/revert_records.php" method="post">
+              <p>Are you sure you want to delete all the candidate records?</p>
+              <div class="alert alert-warning" role="alert">
+                Once it done, cannot be reversable after the deletion is complete.
+              </div>
+              <label for="PasstoConfirm" class="form-label">Password</label>
+              <input type="password" class="form-control" name="passwordConfirm" aria-describedby="passwordHelpBlock" required>
+              <div id="passwordHelpBlock" class="form-text">
+                  To proceed the delete candidate records, Enter the admin password.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-danger" name="submit_delete_records">Delete all the records</button>
+              </div> 
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
 
 <!-- New Modal -->
 <div class="modal fade" id="NewModal" tabindex="-1" aria-labelledby="CreateModalLabel" aria-hidden="true">

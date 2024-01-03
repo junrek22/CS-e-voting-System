@@ -9,15 +9,18 @@ if(!isset($_SESSION['user_type']) || $_SESSION['user_type']!="Admin"){
   <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#NewModal">
     New
   </button>
-  <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#NewModal">
-    Delete all records
-  </button>
 </div>
 <div class="form-search-control">
     <input type="text" name="search" class="form-control" id="seachControl" placeholder="Search Something" required>
 </div>
 <h3>List of Positions</h3>
 </div>
+<?php 
+include "db.php";
+$queryrow = $conn->prepare("SELECT id FROM positions");
+$queryrow->execute();
+?>
+
 <table class="table table-striped">
 <thead class="table-dark">
     <tr>
@@ -26,6 +29,7 @@ if(!isset($_SESSION['user_type']) || $_SESSION['user_type']!="Admin"){
       <th id="option" scope="col" >Options</th>
     </tr>
   </thead>
+  <?php if($queryrow->rowCount() > 0):?>
   <tbody id="records">
     <?php 
       include "../includes/db.php";
@@ -121,8 +125,22 @@ if(!isset($_SESSION['user_type']) || $_SESSION['user_type']!="Admin"){
       </div>
       <?php endforeach; ?>
   </tbody>
+  <?php endif; ?>
 </table>
-
+<?php if($queryrow->rowCount() <= 0):?>
+  <div id="chart-blank">
+      <h3>NO POSITION RECORDS</h3>
+  </div>
+  <style>
+    #chart-blank{
+      height:calc(80vh - 10vh);
+      display:grid;
+      place-items:center;
+    }#chart-blank h3{
+      color:#B6C4B6;
+    }
+  </style>
+<?php endif; ?>
 
 <!-- New Modal -->
 <div class="modal fade" id="NewModal" tabindex="-1" aria-labelledby="CreateModalLabel" aria-hidden="true">

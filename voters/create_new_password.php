@@ -1,10 +1,15 @@
 <?php include "../css/bootstrap.php";
     include "../includes/db.php";
     session_start();
+
+    if(!isset($_SESSION['voter_user_id']) || !isset($_SESSION['acc_stats']) || $_SESSION['acc_stats'] != "New"){
+        header("location: ../index.php");
+    }else{
     $voter_id = $_SESSION['voter_user_id'];
     $queryVoter = $conn->prepare("SELECT * FROM voters WHERE UserID = '$voter_id'");
     $queryVoter->execute();
     $user_voter = $queryVoter->fetch(PDO::FETCH_ASSOC);
+    }
     ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -1,6 +1,6 @@
 <?php 
 session_start();
-if(!isset($_SESSION['voter_user_id'])){
+if(!isset($_SESSION['voter_user_id']) || $_SESSION['already-voter'] != "VOTED"){
     header("location: ../index.php");
 }else{
     $voter_id = $_SESSION['voter_user_id'];
@@ -26,7 +26,26 @@ if(!isset($_SESSION['voter_user_id'])){
     ?>
 </head>
 <link rel="stylesheet" href="../css/voter_done.css">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script>
+  $(document).ready(function(){
+     $(".new_pass").keyup(function(){
+      let conf = $(this).val();
+      if(conf.length >= 10){
+        
+        $("#pwMessage").text("");
+        $(".new_pass").css("border-color", "green");
+        $(".changepass").prop("disabled", false);
 
+      }else{
+        $(".changepass").prop("disabled", true);
+        $(".new_pass").css("border-color", "red");
+        $("#pwMessage").text("Password must be long atleast 10 characters");
+      }
+      
+    });
+  });
+</script>
 <body>
     <nav>
     <h2>E-VOTING SYSTEM</h2>
@@ -91,7 +110,10 @@ if(!isset($_SESSION['voter_user_id'])){
             <form action="../includes/voter_setting_done_vote.php" method="post">
                 <div class="mb-3">
                   <label for="newPasswordLabel" class="form-label">New Password</label>
-                  <input type="password" name="NewPassword" class="form-control" id="newPasswordLabel" required>
+                  <input type="password" name="NewPassword" class="form-control new_pass" id="newPasswordLabel" required>
+                  <div class="form-text" id="pwMessage">
+                
+                  </div>
                 </div>
                 <label for="PasstoConfirm" class="form-label">Old Password</label>
                   <input type="password" id="PasstoConfirm" class="form-control" name="passwordConfirm" aria-describedby="passwordHelpBlock" required>
@@ -100,7 +122,7 @@ if(!isset($_SESSION['voter_user_id'])){
                   </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="submit" name="submit_change_pass" class="btn btn-primary">Save changes</button>
+                  <button type="submit" name="submit_change_pass" class="btn btn-primary changepass">Save changes</button>
                 </div>
               </form>
             </div>

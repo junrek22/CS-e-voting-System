@@ -1,8 +1,32 @@
+<link rel="stylesheet" href="../css/voter_done.css">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script>
+  $(document).ready(function(){
+     $(".new_pass").keyup(function(){
+      let conf = $(this).val();
+      if(conf.length >= 10){
+        $("#pwMessage").text("");
+        $(".new_pass").css("border-color", "green");
+        $(".changepass").prop("disabled", false);
+
+      }else{
+        $(".changepass").prop("disabled", true);
+        $(".new_pass").css("border-color", "red");
+        $("#pwMessage").text("Password must be long atleast 10 characters");
+      }
+      
+    });
+  });
+</script>
 <?php 
 include "db.php";
 if(!isset($_SESSION['user_type']) || $_SESSION['user_type']!="Admin"){
   header("location: ../index.php");
 }else{
+
+  $queryrow = $conn->prepare("SELECT DISTINCT Position FROM candidate");
+  $queryrow->execute();
+
   $votersVar = array("Valid", "Pending", "Invalid");
   $votertypeNum = array();
   $queryVoters = $conn->prepare("SELECT COUNT(UserID) as num_voters FROM voters WHERE Status = :stat");
@@ -35,8 +59,7 @@ if(!isset($_SESSION['user_type']) || $_SESSION['user_type']!="Admin"){
     <h3>DASHBOARD</h3>
     <div class="right-nav">
         <button type="button "class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#changeAdmin">Change Admin Credentials</button>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#vote_recovery">Voter's Recovery</button>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Banner">Banner</button>
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#Banner">Banner</button>
         
 
         <div class="modal fade" id="changeAdmin" tabindex="-1" aria-labelledby="seeChangeAdmin" aria-hidden="true">
@@ -54,7 +77,10 @@ if(!isset($_SESSION['user_type']) || $_SESSION['user_type']!="Admin"){
                 </div>
                 <div class="mb-3">
                     <label for="newFormPassword" class="form-label">New Password</label>
-                    <input class="form-control" id="newFormPassword" name="NewPassword"type="password" required>
+                    <input class="form-control new_pass" id="newFormPassword" name="NewPassword"type="password" required>
+                    <div class="form-text" id="pwMessage">
+                      
+                    </div>
                 </div>
                 <label for="PasstoConfirm" class="form-label">Old Password</label>
                 <input type="password" id="PasstoConfirm" class="form-control" name="passwordConfirm" aria-describedby="passwordHelpBlock" required>
@@ -62,7 +88,7 @@ if(!isset($_SESSION['user_type']) || $_SESSION['user_type']!="Admin"){
                   To proceed to change admin's credential, Enter the admin password.
                 </div>
                 <div class="modal-footer">
-                  <button type="submit" name="submit_change_admin" class="btn btn-primary">Save changes</button>
+                  <button type="submit" name="submit_change_admin" class="btn btn-primary changepass">Save changes</button>
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div> 
                 </form>
@@ -162,27 +188,30 @@ if(!isset($_SESSION['user_type']) || $_SESSION['user_type']!="Admin"){
         <p>Number of Candidates</p>
     </div>
 </div>
+<?php if($queryrow->rowCount() > 0): ?>
 <h3 id="banner_header">
 <?php echo strtoupper($banner['Banner_title']);?>
 </h3>
 <p id="title">
 VOTE TALLY
 </p>
-
 <div id="chart-content">
 <?php include "../includes/ballot_tally.php";?>
 </div>
+<?php endif; ?>
+<?php if($queryrow->rowCount() <= 0): ?>
+  <div id="chart-blank">
+      <h3>NOTHING TO SHOW</h3>
+  </div>
+<?php endif; ?>
 <style>
     .nav-body{
         padding:10px;
         display:flex;
         justify-content:space-between;
-    }.right-nav{
-        /* border:1px solid blue; */
     }.right-nav button{
         margin:0px 5px 0px 5px;
     }.dashboard-cards{
-        /* border:1px solid blue; */
         display:grid;
         grid-template-columns: auto auto auto;
     }.dashboard-cards > div{
@@ -195,7 +224,6 @@ VOTE TALLY
     }.dashboard-cards div > *{
       color:white;
     }
-    
     .chart-container{
         width:50%;
         height:50vh;
@@ -210,6 +238,12 @@ VOTE TALLY
     }#banner_header {
         text-align:center;
         margin:20px;
+    }#chart-blank{
+      height:49vh;
+      display:grid;
+      place-items:center;
+    }#chart-blank h3{
+      color:#B6C4B6;
     }
 </style>
 <?php if(isset($_SESSION['message']) && isset($_SESSION['control']) && isset($_SESSION['title'])): ?>

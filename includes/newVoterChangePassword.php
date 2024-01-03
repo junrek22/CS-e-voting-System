@@ -14,7 +14,9 @@ if(isset($_POST['submit_changePass'])){
         $_SESSION['changePassSuccess'] = "<div class='alert alert-success' role='alert'>
             YOUR PASSWORD HAS BEEN CHANGED SUCCESSFULLY
            </div>";
+           $_SESSION['acc_stats'] = "New";
         header("Location: ../voters/voter_page.php");
+       
     }else{
         $_SESSION['message-wrong-password'] = "<div class='alert alert-danger' role='alert'>
         YOUR PASSWORD DOES NOT MATCH
@@ -22,9 +24,9 @@ if(isset($_POST['submit_changePass'])){
         header("location: ../voters/create_new_password.php");
     }
 }
-// else{
-//     header("location: ../index.php");
-// }
+else{
+    header("location: ../index.php");
+}
 
 
 ?>

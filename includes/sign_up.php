@@ -12,8 +12,6 @@ if(isset($_POST['submit_register'])){
     // $randomtext = $characters[rand(0, strlen($characters) - 1)];
 
     $userID = (string)(date('m')."-".rand(111, 999)."-".rand(1111, 9999));
-    $precinct = array("4563F", "2323G", "6784D");
-    $randomPrecinct = $precinct[rand(0, count($precinct) - 1)];
     $profile_slice = explode(".", $profile_pic_name);
     $profile_type = strtolower(end($profile_slice));
     $allowedType = array("jpg", "png", "jpeg");
@@ -21,7 +19,7 @@ if(isset($_POST['submit_register'])){
         $realPassword = password_hash($password, PASSWORD_DEFAULT);
         if(in_array($profile_type, $allowedType)){
             $profile_name = (!empty(($_FILES['profile']['name']))) ? "profile-voter-".$userID.".".$profile_type : $profile_pic_name;
-            $queryVoters = $conn->prepare("INSERT INTO voters (UserID, Precinct, Firstname, Lastname, Profile_pic, Status, acc_stat, vote_stat) VALUES ('$userID', '$randomPrecinct', '$firstname', '$lastname', '$profile_name', 'Pending', 'Old','NOTVOTED')");
+            $queryVoters = $conn->prepare("INSERT INTO voters (UserID, Firstname, Lastname, Profile_pic, Status, acc_stat, vote_stat) VALUES ('$userID', '$firstname', '$lastname', '$profile_name', 'Pending', 'Old','NOTVOTED')");
             $queryVoters->execute();
             $queryLogin = $conn->prepare("INSERT INTO login (Username, Password, User_Type) VALUES ('$userID','$realPassword', 'Voters')");
             $queryLogin->execute();
@@ -44,7 +42,7 @@ if(isset($_POST['submit_register'])){
         Don't forget your Username or User ID, Please write it on your note in case
         </div>";
         $_SESSION['verif-header'] = "VERIFY YOUR ACCOUNT";
-        $_SESSION['user_type'] = "Voters";
+        $_SESSION['stats'] = "Pending";
         header("location: ../voter_verification.php");
     }else{
         $_SESSION['message-error'] = "<div class='alert alert-danger' role='alert'>

@@ -1,6 +1,6 @@
 <?php include "../css/bootstrap.php";
 session_start();
-if(!isset($_SESSION['user_type']) && $_SESSION['user_type']!="Admin"){
+if(!isset($_SESSION['user_type']) || $_SESSION['user_type']!="Admin"){
     header("location: ../index.php");
 }?>
 <!DOCTYPE html>
@@ -11,6 +11,7 @@ if(!isset($_SESSION['user_type']) && $_SESSION['user_type']!="Admin"){
     <title>Ballot</title>
 </head>
 <link rel="stylesheet" href="../css/default-style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <body>
     <nav>
         <h2>E-VOTING SYSTEM</h2>
@@ -31,13 +32,14 @@ if(!isset($_SESSION['user_type']) && $_SESSION['user_type']!="Admin"){
             </a><a href="request.php">
                 <li>Request box</li>
             </a><a href="ballot.php">
-                <li>Ballot Tally</li>
+                <li>Vote Tally</li>
             </a><a href="../logout.php">
                 <li>Logout</li>
             </a>
         </ul>
     </div>
     <div class="bodypage">
+        <?php include "../includes/vote_tally_body.php";?>
     </div>
 </body>
 </html>

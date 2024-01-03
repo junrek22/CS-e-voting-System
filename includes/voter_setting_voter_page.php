@@ -72,6 +72,8 @@ else if(isset($_POST['submit_change_account'])){
     toastBootstrap.show()
     </script>";
     header("location: ../voters/voter_page.php");
+}else {
+    header("location: ../voters/voter_page.php");
 }
 
 ?>

@@ -3,12 +3,12 @@ session_start();
 if(isset($_SESSION['user_type']) && $_SESSION['user_type']=="Admin"){
   header("location: admin/dashboard.php");
 }else if(isset($_SESSION['user_type']) && $_SESSION['user_type']=="Voters"){
-  if($_SESSION['stats']=="Pending" || $_SESSION['stats']=="Invalid"){
+  if(isset($_SESSION['stats'])){
     header("location: voter_verification.php");
   }else{
-    if($_SESSION['acc_stats']=="New"){
+    if(isset($_SESSION['acc_stats']) && $_SESSION['acc_stats']=="New"){
       header("location: voters/create_new_password.php");
-    }else if($_SESSION['acc_stats']=="Old"){
+    }else if(isset($_SESSION['acc_stats']) && $_SESSION['acc_stats']=="Old"){
       header("location: voters/voter_page.php");
     }
   }
@@ -22,7 +22,7 @@ if(isset($_SESSION['user_type']) && $_SESSION['user_type']=="Admin"){
     <title>Welcome</title>
 </head>
 <link rel="stylesheet" href="css/nav-bar.css">
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script>
   $(document).ready(function(){
@@ -94,8 +94,6 @@ if(isset($_SESSION['user_type']) && $_SESSION['user_type']=="Admin"){
     </button>
   </div>
 </div>
-<h1>VOTE TALLY</h1>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <!-- <script>
   
   function load(){
@@ -118,10 +116,27 @@ if(isset($_SESSION['user_type']) && $_SESSION['user_type']=="Admin"){
         //   load();
         // },1000);
 </script> -->
-<div id="chart-content">
+<?php 
+include "includes/db.php";
+$queryrow = $conn->prepare("SELECT DISTINCT Position FROM candidate");
+$queryrow->execute();
 
+$queryBanner = $conn->prepare("SELECT * FROM banner");
+$queryBanner->execute();
+$banner = $queryBanner->fetch(PDO::FETCH_ASSOC);
+
+?>
+<?php if($queryrow->rowCount() > 0): ?>
+<h3 id="banner_header">
+<?php echo strtoupper($banner['Banner_title']);?>
+</h3>
+<p id="title">
+VOTE TALLY
+</p>
+<div id="chart-content">
 <?php include "includes/ballot_tally.php";?>
 </div>
+<?php endif; ?>
 </body>
 </html>
 <style>
@@ -133,16 +148,22 @@ if(isset($_SESSION['user_type']) && $_SESSION['user_type']=="Admin"){
   }.carousel-caption{
     color:#092635;
   }.chart-container{
-        width:50vw;
+        width:50%;
         height:50vh;
         margin-top:20px;
+        border:1px solid #092635;
     }#chart-content {
-        display:grid;
-        grid-template-columns: auto auto;
-        width:100%;
-    } h1 {
+        display:flex;
+        flex-wrap:wrap;
+    } #title {
+        text-align:center;
+        margin:0;
+    }#banner_header {
         text-align:center;
         margin:20px;
+    }
+    .alert{
+      margin:0;
     }
 </style>
 <!-- Login Modal -->
@@ -161,7 +182,8 @@ if(isset($_SESSION['user_type']) && $_SESSION['user_type']=="Admin"){
             </div>
             <label for="inputPassword5" class="form-label">Password</label>
             <input type="password" name="password" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock" required >
-            <div id="passwordHelpBlock" class="form-text"><a href="http://">Forgot Password</a></div>
+            <br>
+           <div id="passwordHelpBlock" class="form-text"><p style="color:#525CEB;">Forgot your password or User ID? <br>Please go see the com-elect admission to recover your voter account.</p></div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="submit" name="submit_log" class="btn btn-primary">Login</button>

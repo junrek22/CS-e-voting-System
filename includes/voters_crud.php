@@ -9,8 +9,8 @@
   <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#NewModal">
     New
   </button>
-  <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#NewModal">
-    Delete all records
+  <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#revert_votes">
+    Reset votes
   </button>
 </div>
 <div class="form-search-control">
@@ -26,7 +26,7 @@
       <th scope="col">User ID</th>
       <th scope="col">First name</th>
       <th scope="col">Last name</th>
-      <th scope="col">Precinct #</th>
+      <th scope="col">Vote Status</th>
       <th scope="col">Options</th>
     </tr>
   </thead>
@@ -43,8 +43,9 @@
       <td><b><?php echo $rows['UserID']; ?></b></td>
       <td><?php echo $rows['Firstname']; ?></td>
       <td><?php echo $rows['Lastname']; ?></td>
-      <td><?php echo $rows['Precinct']; ?></td>
+      <?php if($rows['vote_stat']=="VOTED"){echo "<td style='color:green;'>Already Voted</td>";}else{echo "<td style='color:red;'>Not Voted Yet</td>";} ?>
       <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal-<?php echo $rows['id'];?>">Edit</button>
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#recoverModal-<?php echo $rows['id'];?>">Recover</button>
       <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#DeleteModal-<?php echo $rows['id'];?>">Delete</button></td>
     </tr>
 
@@ -83,6 +84,38 @@
       </div>
     </div>
 
+    <div class="modal fade" id="recoverModal-<?php echo $rows['id'];?>" tabindex="-1" aria-labelledby="recoverSeeModal" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="recoverSeeModal">Password Recover</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action="../includes/revert_records.php" method="post">
+              <p>Are you sure you want to recover: <b><?php echo " ".$rows['Firstname']." ".$rows['Lastname'];?></b></p>
+              <p>User ID: <b><?php echo $rows['UserID'];?></b></p>
+              <div class="alert alert-primary" role="alert">
+                The voter's password will be reset to default: 1234
+              </div>
+              <label for="PasstoConfirm" class="form-label">Password</label>
+              <input type="password" class="form-control" name="passwordConfirm" aria-describedby="passwordHelpBlock" required>
+              <div id="passwordHelpBlock" class="form-text">
+                  To proceed the reset votes, Enter the admin password.
+              </div>
+              <div class="mb-3">
+                <input type="hidden" name="UserID" class="form-control" value="<?php echo $rows['UserID']; ?>">
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success" name="submit_recover">Recover</button>
+              </div> 
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Delete Modal -->
     <div class="modal fade" id="DeleteModal-<?php echo $rows['id'];?>" tabindex="-1" aria-labelledby="DeleteModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -105,6 +138,33 @@
   </tbody>
 </table>
 
+<div class="modal fade" id="revert_votes" tabindex="-1" aria-labelledby="revertallvotes" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="revertallvotes">Reset all votes</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action="../includes/revert_records.php" method="post">
+              <p>Are you sure you want to reset all the votes?</p>
+              <div class="alert alert-warning" role="alert">
+                Once it done, cannot be reversable after the reset is complete.
+              </div>
+              <label for="PasstoConfirm" class="form-label">Password</label>
+              <input type="password" class="form-control" name="passwordConfirm" aria-describedby="passwordHelpBlock" required>
+              <div id="passwordHelpBlock" class="form-text">
+                  To proceed the reset votes, Enter the admin password.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-danger" name="revert_submit">Reset all votes</button>
+              </div> 
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
 
 <!-- New Modal -->
 <div class="modal fade" id="NewModal" tabindex="-1" aria-labelledby="CreateModalLabel" aria-hidden="true">

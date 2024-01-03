@@ -49,7 +49,29 @@ td, th{
       <th id="option" scope="col" >Options</th>
     </tr>
   </thead>
+  <?php 
+include "db.php";
+// $queryrow = $conn->prepare("SELECT Position FROM candidate");
+$queryrow = $conn->prepare("SELECT id FROM voters WHERE Status ='Pending'");
+$queryrow->execute();
+?>
+<?php if($queryrow->rowCount() > 0):?>
   <tbody id="records">
     <?php include "../includes/verification_json.php";?>
   </tbody>
+  <?php endif;?>
 </table>
+<?php if($queryrow->rowCount() <= 0):?>
+  <div id="chart-blank">
+      <h3>NO POSITION RECORDS</h3>
+  </div>
+  <style>
+    #chart-blank{
+      height:calc(78vh - 10vh);
+      display:grid;
+      place-items:center;
+    }#chart-blank h3{
+      color:#B6C4B6;
+    }
+  </style>
+  <?php endif;?>
