@@ -149,7 +149,7 @@ if(!isset($_SESSION['voter_user_id']) || $_SESSION['already-voter'] != "VOTED"){
                                 <div class="ballot-card">
                                     <div class="position"><b><?php echo $ballot['Position'];?></b></div>
                                     <div class="profile"><img src="../profile/<?php echo $ballot['profile_pic'];?>" alt=""></div>
-                                    <div class="name-candidate"><?php echo $ballot['candidate_first_name'].' <b>"'.$ballot['candidate_nickname'].'"</b> '.$ballot['candidate_first_name'];?></div>
+                                    <div class="name-candidate"><?php echo $ballot['candidate_first_name'].' <b>"'.$ballot['candidate_nickname'].'"</b> '.$ballot['candidate_last_name'];?></div>
                                 </div>
                                 <?php endforeach;?>
                             </div>

@@ -5,6 +5,9 @@ $array_vote_count = array();
 $array_position = array();
 $querypost = $conn->prepare("SELECT DISTINCT Position FROM candidate");
 $querypost->execute();
+// $queryCountValidVoters = $conn->prepare("SELECT COUNT(UserID) as validCount FROM voters WHERE Status = 'Valid'");
+// $queryCountValidVoters->execute();
+$numVal = $queryCountValidVoters->fetch(PDO::FETCH_ASSOC);
 $queryCand = $conn->prepare("SELECT candidate_id FROM candidate WHERE position = :cand_position");
 $queryCount = $conn->prepare("SELECT candidate.candidate_nickname as nickname, COUNT(voters_ballot.user_voter) as count, candidate.Position as position FROM candidate 
 LEFT JOIN voters_ballot ON candidate.candidate_id = voters_ballot.candidate_id WHERE candidate.candidate_id = :cand_id");
@@ -62,10 +65,9 @@ foreach($querypost as $pos){
         indexAxis: 'y',
       scales: {
         x: {
-            min:0,
-            max:5,
+            
           ticks: {
-            stepSize: 1
+            
           }
         }
       }
