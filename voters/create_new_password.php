@@ -2,7 +2,7 @@
     include "../includes/db.php";
     session_start();
 
-    if(!isset($_SESSION['voter_user_id']) || !isset($_SESSION['acc_stats']) || $_SESSION['acc_stats'] != "New"){
+    if(!isset($_SESSION['voter_user_id']) ||  $_SESSION['acc_stats'] == "Old"){
         header("location: ../index.php");
     }else{
     $voter_id = $_SESSION['voter_user_id'];

@@ -3,7 +3,7 @@ session_start();
 if(isset($_SESSION['user_type']) && $_SESSION['user_type']=="Admin"){
   header("location: admin/dashboard.php");
 }else if(isset($_SESSION['user_type']) && $_SESSION['user_type']=="Voters"){
-  if(isset($_SESSION['stats'])){
+  if(isset($_SESSION['stats']) && ($_SESSION['stats'] == "Pending" || $_SESSION['stats'] == "Invalid")){
     header("location: voter_verification.php");
   }else{
     if(isset($_SESSION['acc_stats']) && $_SESSION['acc_stats']=="New"){

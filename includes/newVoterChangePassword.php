@@ -14,7 +14,7 @@ if(isset($_POST['submit_changePass'])){
         $_SESSION['changePassSuccess'] = "<div class='alert alert-success' role='alert'>
             YOUR PASSWORD HAS BEEN CHANGED SUCCESSFULLY
            </div>";
-           $_SESSION['acc_stats'] = "New";
+           $_SESSION['acc_stats'] = "Old";
         header("Location: ../voters/voter_page.php");
        
     }else{

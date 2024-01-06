@@ -30,9 +30,7 @@ if(isset($_POST['submit_log'])){
                 $getStatus = $queryReview->fetch(PDO::FETCH_ASSOC);
 
                 $_SESSION['user_type'] = $result['User_Type'];
-                $_SESSION['stats'] = $getStatus['Status'];
-                $_SESSION['acc_stats'] = $getStatus['acc_stat'];
-                $_SESSION['voter_user_id'] = $getStatus['Username'];
+                $_SESSION['voter_user_id'] = $result['Username'];
                 $_SESSION['already-voter'] = $getStatus['vote_stat'];
 
                 if($getStatus['Status']=="Pending"){
@@ -42,16 +40,20 @@ if(isset($_POST['submit_log'])){
                     Don't forget your Username or User ID, Please write it on your note in case
                     </div>";
                     $_SESSION['verif-header'] = "VERIFY YOUR ACCOUNT";
+                    $_SESSION['stats'] = $getStatus['Status'];
                     header("location: ../voter_verification.php");
                 }else if($getStatus['Status']=="Invalid"){
                     $_SESSION['verif-body-text'] = "<p>If you are seeing this message, your account has been invalidated for some reason that is difficult to identify your valid identity. Please contact to the admission to clarify this matter.</p>
                     <p>This Permanent User ID or Username has been revoked: <b>".$User_ID."</b></p>";
                     $_SESSION['verif-header'] = "ACCOUNT HAS BEEN INVALIDATED";
+                    $_SESSION['stats'] = $getStatus['Status'];
                     header("location: ../voter_verification.php");
                 }else if($getStatus['Status']=="Valid"){
                     if($getStatus['acc_stat']=="New"){     
+                        $_SESSION['acc_stats'] = $getStatus['acc_stat'];
                         header("location: ../voters/create_new_password.php");
                     }else if($getStatus['acc_stat']=="Old"){
+                        $_SESSION['acc_stats'] = $getStatus['acc_stat'];
                         header("location: ../voters/voter_page.php");
                     }
                 }

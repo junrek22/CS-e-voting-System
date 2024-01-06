@@ -1,6 +1,6 @@
 <?php 
 session_start();
-if(!isset($_SESSION['voter_user_id']) || !isset($_SESSION['acc_stats']) || $_SESSION['acc_stats'] != "Old"){
+if(!isset($_SESSION['voter_user_id']) || (isset($_SESSION['acc_stats']) && $_SESSION['acc_stats']=="New")){
     header("location: ../index.php");
 }else if(isset($_SESSION['already-voter']) && $_SESSION['already-voter']==="VOTED"){
     $_SESSION['header-title'] = "ALREADY VOTED";
