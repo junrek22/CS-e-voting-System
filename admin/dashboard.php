@@ -23,7 +23,7 @@ if(!isset($_SESSION['user_type']) || $_SESSION['user_type']!="Admin"){
     </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <link rel="stylesheet" href="../css/default-style.css">
-<body>
+<body onload="load()">
     <nav>
         <h2>E-VOTING SYSTEM</h2>
     </nav>

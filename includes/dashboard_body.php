@@ -22,37 +22,6 @@
 include "db.php";
 if(!isset($_SESSION['user_type']) || $_SESSION['user_type']!="Admin"){
   header("location: ../index.php");
-}else{
-
-  $queryrow = $conn->prepare("SELECT DISTINCT Position FROM candidate");
-  $queryrow->execute();
-
-  $votersVar = array("Valid", "Pending", "Invalid");
-  $votertypeNum = array();
-  $queryVoters = $conn->prepare("SELECT COUNT(UserID) as num_voters FROM voters WHERE Status = :stat");
-  foreach($votersVar as $voters){
-      $queryVoters->bindParam(":stat", $voters, PDO::PARAM_STR);
-      $queryVoters->execute();
-      $voterFetch = $queryVoters->fetch(PDO::FETCH_ASSOC);
-      array_push($votertypeNum, $voterFetch['num_voters']);
-  }
-  $votedtype = array("VOTED", "NOTVOTED");
-  $votedNum = array();
-  $queryVoted = $conn->prepare("SELECT COUNT(UserID) as votes FROM voters WHERE Status = 'Valid' AND vote_stat = :vote_stat");
-  foreach($votedtype as $isVote){
-      $queryVoted->bindParam(":vote_stat", $isVote, PDO::PARAM_STR);
-      $queryVoted->execute();
-      $hasVoteFetch = $queryVoted->fetch(PDO::FETCH_ASSOC);
-      array_push($votedNum, $hasVoteFetch['votes']);
-  }
-  
-  $queryCand = $conn->prepare("SELECT COUNT(candidate_id) as candidate_num FROM candidate");
-  $queryCand->execute();
-  $numCand = $queryCand->fetch(PDO::FETCH_ASSOC);
-
-  $queryBanner = $conn->prepare("SELECT * FROM banner");
-  $queryBanner->execute();
-  $banner = $queryBanner->fetch(PDO::FETCH_ASSOC);
 }
 ?>
 <div class="nav-body">
@@ -164,30 +133,37 @@ if(!isset($_SESSION['user_type']) || $_SESSION['user_type']!="Admin"){
 </div>
 <div class="dashboard-cards">
     <div>
-        <h1><?php echo $votertypeNum[0];?></h1>
+        <h1 class="record_board"></h1>
         <p>Number of Registered Voters</p>
     </div>
     <div>
-        <h1><?php echo $votertypeNum[1];?></h1>
+        <h1 class="record_board"></h1>
         <p>Number of Unregistered Voters</p>
     </div>
     <div>
-        <h1><?php echo $votedNum[0];?></h1>
+        <h1 class="record_board"></h1>
         <p>Number of Voters Already Voted</p>
     </div>
     <div>
-        <h1><?php echo $votedNum[1];?></h1>
+        <h1 class="record_board"></h1>
         <p>Number of Voters Not Voted Yet</p>
     </div>
     <div>
-        <h1><?php echo $votertypeNum[2];?></h1>
+        <h1 class="record_board"></h1>
         <p>Number of Revoked voters</p>
     </div>
     <div>
-        <h1><?php echo $numCand['candidate_num'];?></h1>
+        <h1 class="record_board"></h1>
         <p>Number of Candidates</p>
     </div>
 </div>
+<?php 
+$queryrow = $conn->prepare("SELECT DISTINCT Position FROM candidate");
+$queryrow->execute();
+$queryBanner = $conn->prepare("SELECT * FROM banner");
+$queryBanner->execute();
+$banner = $queryBanner->fetch(PDO::FETCH_ASSOC);
+?>
 <?php if($queryrow->rowCount() > 0): ?>
 <h3 id="banner_header">
 <?php echo strtoupper($banner['Banner_title']);?>
@@ -195,8 +171,97 @@ if(!isset($_SESSION['user_type']) || $_SESSION['user_type']!="Admin"){
 <p id="title">
 VOTE TALLY
 </p>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  let catchdata = "";
+  function setResponse(data){
+    catchdata = data;
+  }
+  function getResponse(){
+    return catchdata;
+  }
+  function loadEverything(){
+    const xhttp = new XMLHttpRequest();
+    xhttp.onload = function(){
+        setResponse(this.responseText);
+    }
+    xhttp.open("GET", "../includes/ballot_tally_realtime.php");
+    xhttp.send();
+  }
+  function loadDashboard(){
+    const json_http = new XMLHttpRequest();
+    json_http.onload = function(){
+        let record_class = document.getElementsByClassName("record_board");
+        let json_retrieve = JSON.parse(this.responseText);
+        for(let i = 0; i<json_retrieve.length; i++){
+          record_class[i].innerHTML = json_retrieve[i];
+        }
+    }
+    json_http.open("GET", "../includes/dashboard_count.php");
+    json_http.send();
+  }
+  function load(){
+    loadDashboard();
+    loadEverything();
+  }
+  function jsonAsync(){
+    let cand_nicks = [];
+    let cand_voteCount = [];
+    let cand_post = [];
+    let jsonText = getResponse();
+    let getJson = JSON.parse(jsonText);
+    let i = 0;
+    getJson.forEach(function(position) {
+      let cand_nicks_votes = {};
+          for (var key in position) {
+                  var candidates = position[key];
+                  candidates.forEach(function(candidate) {
+                      var name = candidate.name;
+                      var votes = candidate.vote_count;
+                      cand_nicks_votes[name] = votes;
+                  });
+                  cand_post.push(cand_nicks_votes);
+                  
+              i++;
+          }
+      });
+      cand_post.forEach(function(key){
+        let cand_nick_temp = [], cand_vote_temp = [];
+        var sortedKeys = Object.keys(key).sort(function(a, b) {
+          return key[b] - key[a];
+      });
+      var sortedArray = {};
+        sortedKeys.forEach(function(sortkey) {
+            sortedArray[sortkey] = key[sortkey];
+      });
+      Object.keys(sortedArray).forEach(function(catchkey) {
+          var value = sortedArray[catchkey];
+          cand_nick_temp.push(catchkey);
+          cand_vote_temp.push(value);
+          ;
+      });
+      cand_nicks.push(cand_nick_temp);
+      cand_voteCount.push(cand_vote_temp);
+      })
+      <?php 
+      $queryLoop = $conn->prepare("SELECT DISTINCT Position FROM candidate");
+      $queryLoop->execute();
+      $j = 0;
+      ?>
+      <?php foreach($queryLoop as $k):?>
+        chartTable<?php echo $j;?>.data.labels = cand_nicks[<?php echo $j;?>];
+        chartTable<?php echo $j;?>.data.datasets[0].data = cand_voteCount[<?php echo $j;?>];
+        chartTable<?php echo $j;?>.update();
+      <?php $j++;?>
+      <?php endforeach;?>
+  }
+  setInterval(function(){
+    load();
+    jsonAsync();
+  },1000);
+</script> 
 <div id="chart-content">
-<?php include "../includes/ballot_tally.php";?>
+<?php include "ballot_tally.php";?>
 </div>
 <?php endif; ?>
 <?php if($queryrow->rowCount() <= 0): ?>
