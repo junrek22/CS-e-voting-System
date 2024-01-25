@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="../css/voter_done.css">
+<link rel="stylesheet" href="../css/dashboard_body.css">
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script>
   $(document).ready(function(){
@@ -168,9 +169,8 @@ $banner = $queryBanner->fetch(PDO::FETCH_ASSOC);
 <h3 id="banner_header">
 <?php echo strtoupper($banner['Banner_title']);?>
 </h3>
-<p id="title">
-VOTE TALLY
-</p>
+<p class="title">
+VOTE TALLY</p>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   let catchdata = "";
@@ -199,10 +199,6 @@ VOTE TALLY
     }
     json_http.open("GET", "../includes/dashboard_count.php");
     json_http.send();
-  }
-  function load(){
-    loadDashboard();
-    loadEverything();
   }
   function jsonAsync(){
     let cand_nicks = [];
@@ -255,12 +251,16 @@ VOTE TALLY
       <?php $j++;?>
       <?php endforeach;?>
   }
+  function load(){
+    loadDashboard();
+    loadEverything();
+  }
   setInterval(function(){
     load();
     jsonAsync();
   },1000);
 </script> 
-<div id="chart-content">
+<div class="chart-content">
 <?php include "ballot_tally.php";?>
 </div>
 <?php endif; ?>
@@ -269,48 +269,6 @@ VOTE TALLY
       <h3>NOTHING TO SHOW</h3>
   </div>
 <?php endif; ?>
-<style>
-    .nav-body{
-        padding:10px;
-        display:flex;
-        justify-content:space-between;
-    }.right-nav button{
-        margin:0px 5px 0px 5px;
-    }.dashboard-cards{
-        display:grid;
-        grid-template-columns: auto auto auto;
-    }.dashboard-cards > div{
-      text-align:center;
-       border:1px solid #092635;
-        border-radius:10px;
-       margin:0px 5px 10px 5px;
-       padding-top:5px;
-       background-color: #5C8374;
-    }.dashboard-cards div > *{
-      color:white;
-    }
-    .chart-container{
-        width:50%;
-        height:50vh;
-        margin-top:20px;
-        border:1px solid #092635;
-    }#chart-content {
-        display:flex;
-        flex-wrap:wrap;
-    } #title {
-        text-align:center;
-        margin:0;
-    }#banner_header {
-        text-align:center;
-        margin:20px;
-    }#chart-blank{
-      height:49vh;
-      display:grid;
-      place-items:center;
-    }#chart-blank h3{
-      color:#B6C4B6;
-    }
-</style>
 <?php if(isset($_SESSION['message']) && isset($_SESSION['control']) && isset($_SESSION['title'])): ?>
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
   <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">

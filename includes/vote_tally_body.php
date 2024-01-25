@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="../css/vote_tally_body.css">
 <?php 
 include "db.php";
 if(!isset($_SESSION['user_type']) || $_SESSION['user_type']!="Admin"){
@@ -16,7 +17,7 @@ if(!isset($_SESSION['user_type']) || $_SESSION['user_type']!="Admin"){
 ?>
 <?php if($queryrow->rowCount() > 0): ?>
 <div class="nav-body">
-    <h3>VOTE TALLY</h3>
+    <h3>TURNING RESULT</h3>
     <p id="banner_header">
     <?php echo strtoupper($banner['Banner_title']);?>
 </p>
@@ -34,8 +35,106 @@ if(!isset($_SESSION['user_type']) || $_SESSION['user_type']!="Admin"){
     </div>
     <?php endforeach;?>
 </div>
-<div id="chart-content">
-<?php include "../includes/ballot_tally.php";?>
+<div class="turning-content">
+  <div class="turning-container">
+    <h2 class="title">Top 10 Elected President</h2>
+    <div class="turning-padding">
+      <div class="candidate_card">
+        <h4>Top 1</h4>
+        <p>167 VOTES</p>
+        <img src="admin.jpg" alt="">
+        <div class="cand_name">
+          <p><b>NATHANIEL ANGELO OLVIDO GENTUGAO</b></p>
+        </div>
+      </div>
+
+      <div class="candidate_card">
+        <h4>Top 1</h4>
+        <p>167 VOTES</p>
+        <img src="admin.jpg" alt="">
+        <div class="cand_name">
+          <p><b>NATHANIEL ANGELO OLVIDO GENTUGAO</b></p>
+        </div>
+      </div>
+
+      <div class="candidate_card">
+        <h4>Top 1</h4>
+        <p>167 VOTES</p>
+        <img src="admin.jpg" alt="">
+        <div class="cand_name">
+          <p><b>NATHANIEL ANGELO OLVIDO GENTUGAO</b></p>
+        </div>
+      </div>
+
+      <div class="candidate_card">
+        <h4>Top 1</h4>
+        <p>167 VOTES</p>
+        <img src="admin.jpg" alt="">
+        <div class="cand_name">
+          <p><b>NATHANIEL ANGELO OLVIDO GENTUGAO</b></p>
+        </div>
+      </div>
+
+      <div class="candidate_card">
+        <h4>Top 1</h4>
+        <p>167 VOTES</p>
+        <img src="admin.jpg" alt="">
+        <div class="cand_name">
+          <p><b>NATHANIEL ANGELO OLVIDO GENTUGAO</b></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="turning-container">
+    <h2 class="title">Top 10 Elected President</h2>
+    <div class="turning-padding">
+      <div class="candidate_card">
+        <h4>Top 1</h4>
+        <p>167 VOTES</p>
+        <img src="admin.jpg" alt="">
+        <div class="cand_name">
+          <p><b>NATHANIEL ANGELO OLVIDO GENTUGAO</b></p>
+        </div>
+      </div>
+
+      <div class="candidate_card">
+        <h4>Top 1</h4>
+        <p>167 VOTES</p>
+        <img src="admin.jpg" alt="">
+        <div class="cand_name">
+          <p><b>NATHANIEL ANGELO OLVIDO GENTUGAO</b></p>
+        </div>
+      </div>
+
+      <div class="candidate_card">
+        <h4>Top 1</h4>
+        <p>167 VOTES</p>
+        <img src="admin.jpg" alt="">
+        <div class="cand_name">
+          <p><b>NATHANIEL ANGELO OLVIDO GENTUGAO</b></p>
+        </div>
+      </div>
+
+      <div class="candidate_card">
+        <h4>Top 1</h4>
+        <p>167 VOTES</p>
+        <img src="admin.jpg" alt="">
+        <div class="cand_name">
+          <p><b>NATHANIEL ANGELO OLVIDO GENTUGAO</b></p>
+        </div>
+      </div>
+
+      <div class="candidate_card">
+        <h4>Top 1</h4>
+        <p>167 VOTES</p>
+        <img src="admin.jpg" alt="">
+        <div class="cand_name">
+          <p><b>NATHANIEL ANGELO OLVIDO GENTUGAO</b></p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <?php endif; ?>
 <?php if($queryrow->rowCount() <= 0): ?>
@@ -43,47 +142,3 @@ if(!isset($_SESSION['user_type']) || $_SESSION['user_type']!="Admin"){
       <h3>NOTHING TO SHOW</h3>
   </div>
 <?php endif; ?>
-<style>
-    .nav-body{
-        padding:15px;
-        border:1px solid #092635;
-    }.right-nav button{
-        margin:0px 5px 0px 5px;
-    }.dashboard-cards{
-       display:flex;
-       flex-wrap:wrap;
-        margin:10px;
-       
-       justify-content:center;
-        padding:10px;
-        
-    }.dashboard-cards > div{
-      text-align:center;
-       border:1px solid #092635;
-        border-radius:10px;
-       padding:5px 30px 0px 30px;
-       background-color: #5C8374;
-       margin:10px;
-    }.dashboard-cards div > *{
-      color:white;
-    }
-    .chart-container{
-        height:70vh;
-        margin-top:20px;
-    }#chart-content {
-        display:flex;
-        align-items:center;
-        flex-direction:column;
-    } #title {
-        text-align:center;
-        margin:0;
-    }.nav-body > * {
-        text-align:center;
-    }#chart-blank{
-      height:calc(100vh - 10vh);
-      display:grid;
-      place-items:center;
-    }#chart-blank h3{
-      color:#B6C4B6;
-    }
-</style>
