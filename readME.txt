@@ -7,7 +7,7 @@
     (If you haven't installed it yet, Download Xampp Control Panel)
 5.) Go to PhpMyAdmin
 6.) Create database and named it "evoting"
-7.) Import the existing database provided inside the "database" folder
+7.) Import the existing database provided inside the "database" folder in the github project (e-voting system)
 8.) Ready to go
 
 search localhost/e-voting-system/
